@@ -1,0 +1,233 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/White"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.stan.phonebook.InfoFragment"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    >
+
+<!--
+    Big image
+-->
+
+    <ImageView
+        android:id="@+id/bigProfilePic"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_gravity="left"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+    <!--
+       Birthday
+    -->
+
+    <TextView
+        android:id="@+id/birthdateLabel"
+        android:focusable="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_birthday"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        android:layout_alignLeft="@id/bigProfilePic"
+        android:layout_below="@id/bigProfilePic"
+         />
+
+    <TextView
+        android:id="@+id/birthdate"
+        android:focusable="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:gravity="center_vertical"
+        android:textSize="22sp"
+        android:textColor="#000"
+        android:layout_alignLeft="@id/bigProfilePic"
+        android:layout_below="@+id/birthdateLabel"
+        android:layout_marginBottom="25dp"/>
+
+
+    <!--
+       Phone Numbers
+    -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/label_phone"
+        android:id="@+id/phoneLabel"
+        android:layout_below="@+id/birthdate"
+        android:layout_alignLeft="@id/bigProfilePic"
+        android:layout_alignStart="@id/bigProfilePic"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/phone_home"
+        android:textColor="#000"
+        android:layout_below="@+id/phoneLabel"
+        android:layout_alignLeft="@+id/phoneLabel"
+        android:layout_alignStart="@+id/phoneLabel"
+        android:textSize="22sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/phone_work"
+        android:textSize="22sp"
+        android:textColor="#000"
+        android:layout_below="@id/phone_home"
+        android:layout_alignLeft="@+id/phoneLabel"
+        android:layout_alignStart="@+id/phoneLabel"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:id="@+id/phone_mobile"
+        android:textColor="#000"
+        android:layout_below="@id/phone_work"
+        android:layout_alignLeft="@+id/phoneLabel"
+        android:layout_alignStart="@+id/phoneLabel"/>
+
+    <!--
+       Address
+   -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="@string/label_address"
+        android:id="@+id/addressLabel"
+        android:layout_below="@+id/phone_mobile"
+        android:layout_alignLeft="@id/bigProfilePic"
+        android:layout_alignStart="@id/bigProfilePic"
+
+        android:layout_marginTop="25dp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:id="@+id/street"
+        android:textColor="#000"
+        android:layout_below="@+id/addressLabel"
+        android:layout_alignLeft="@+id/addressLabel"
+        android:layout_alignStart="@+id/addressLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:id="@+id/city_state_zip"
+        android:layout_below="@+id/street"
+        android:textColor="#000"
+        android:layout_alignLeft="@+id/street"
+        android:layout_alignStart="@+id/street" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="@string/label_email"
+        android:id="@+id/emailLabel"
+        android:layout_above="@+id/email"
+        android:layout_alignLeft="@+id/email"
+        android:layout_alignStart="@+id/email"
+        android:layout_marginTop="25dp" />
+
+    <!--
+       E-Mail
+   -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:id="@+id/email"
+        android:textColor="#000"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/bigProfilePic"
+        android:layout_alignStart="@+id/bigProfilePic"
+        android:layout_marginBottom="25dp" />
+
+
+    <TextView
+        android:id="@+id/nameLabel"
+        android:focusable="false"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:gravity="center_vertical"
+        android:text="@string/label_name"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/bigProfilePic"
+        android:layout_toEndOf="@+id/bigProfilePic" />
+
+    <!--
+       Name
+   -->
+
+    <TextView
+      android:id="@+id/nameLine"
+      android:focusable="false"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignWithParentIfMissing="true"
+      android:gravity="top|center_vertical"
+      android:textSize="25sp"
+        android:textColor="#000"
+        android:ellipsize="marquee"
+        android:layout_below="@+id/nameLabel"
+        android:layout_alignLeft="@+id/nameLabel"
+        android:layout_alignStart="@+id/nameLabel" />
+
+    <!--
+       Company
+   -->
+
+    <TextView
+      android:id="@+id/companyLabel"
+      android:focusable="false"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignWithParentIfMissing="true"
+      android:gravity="center_vertical"
+      android:text="@string/label_Company"
+      android:textSize="16sp"
+        android:layout_below="@+id/nameLine"
+        android:layout_toRightOf="@+id/bigProfilePic"
+        android:layout_toEndOf="@+id/bigProfilePic"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/company"
+        android:focusable="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:gravity="top|center_vertical"
+        android:maxLines="1"
+        android:textSize="25sp"
+        android:textColor="#000"
+        android:ellipsize="marquee"
+        android:layout_below="@+id/companyLabel"
+        android:layout_toRightOf="@+id/bigProfilePic"
+        android:layout_toEndOf="@+id/bigProfilePic" />
+
+</RelativeLayout>

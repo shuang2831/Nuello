@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.stan.phonebook">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_contact_phone_black_48dp"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.stan.phonebook.LoginActivity" />
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="com.example.stan.phonebook.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.stan.phonebook.LoginActivity" />
+        </activity>
+        <activity android:name=".RegisterActivity">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="com.example.stan.phonebook.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.stan.phonebook.LoginActivity" />
+        </activity>
+    </application>
+
+</manifest>
