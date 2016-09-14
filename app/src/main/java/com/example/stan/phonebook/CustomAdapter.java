@@ -33,7 +33,7 @@ public class CustomAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater; // inflater
     private int resource = 0;   // The view
-    private List<ContactDetails> contact_list; // our list of contacts
+    private List<UserInfo> contact_list; // our list of contacts
     private List<MoreContactDetails> more_contact_list; // our list of extra info per contact
 
     private class ViewHolder {
@@ -43,7 +43,7 @@ public class CustomAdapter extends BaseAdapter {
         ImageView favStar;      // Favorite Star
     }
 
-    public CustomAdapter(Context context, int resource, List<ContactDetails> contact_list, List<MoreContactDetails> more_contact_list) {
+    public CustomAdapter(Context context, int resource, List<UserInfo> contact_list, List<MoreContactDetails> more_contact_list) {
 
         // Contructor would get these values from its paramters and set them.
         this.context = context;
@@ -58,7 +58,7 @@ public class CustomAdapter extends BaseAdapter {
         return contact_list.size();
     } // returns size of contact_list
 
-    public ContactDetails getItem(int position) {
+    public UserInfo getItem(int position) {
         return contact_list.get(position);
     } // Returns object in position
 
@@ -85,10 +85,10 @@ public class CustomAdapter extends BaseAdapter {
 
 
         holder.NameTextView.setText(contact_list.get(position).getName()); // set Name
-        holder.MobileTextView.setText(contact_list.get(position).getPhone().getMobile()); // set Number
+        //holder.MobileTextView.setText(contact_list.get(position).getPhone().getMobile()); // set Number
         holder.image.setImageResource(R.drawable.ic_launcher); // When an image is not loaded yet, set it to
                                                                 // a stock image icon
-        new LoadImage(holder.image).execute(contact_list.get(position).getSmallImageURL());
+       // new LoadImage(holder.image).execute(contact_list.get(position).getSmallImageURL());
         // Here's where is gets tricky. We're running our own Asynchrous task called LoadImage that reads
         // in an image from an URL (in this case the contact's Small Image URL). It is then set to the
         // thumbnail image here in the ImageView.
