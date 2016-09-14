@@ -32,7 +32,7 @@ import java.util.TimeZone;
 public class InfoFragment extends Fragment {
     final static String ARG_POSITION = "position";
     int mCurrentPosition = -1;
-    List<ContactDetails> if_RetrievedContactDetailsList; // Initialize a list of class ContactDetails
+    List<UserInfo> if_RetrievedContactDetailsList; // Initialize a list of class ContactDetails
                                                         // Because the JSON used contains an array of
                                                         // contacts, we need to pull out a full list,
                                                         // not just a single contact.
@@ -48,8 +48,8 @@ public class InfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if_RetrievedContactDetailsList = MainActivity.ContactDetailsList; // Again like in ContactFragment, is this a good idea?
-        if_MoreContactDetailsList = MainActivity.MoreContactDetailsList; // Pull out this date from MainActivity. I hope this isn't making things hella slow
+        if_RetrievedContactDetailsList = MainActivity.FriendDetailList; // Again like in ContactFragment, is this a good idea?
+        //if_MoreContactDetailsList = MainActivity.MoreContactDetailsList; // Pull out this date from MainActivity. I hope this isn't making things hella slow
 
         if (savedInstanceState != null) {
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION); // Save the position
@@ -81,39 +81,39 @@ public class InfoFragment extends Fragment {
         // This big hunk of code should be straightforward. It sets the Textviews and images in the
         // Contact Details view. We pull our data from both if_RetrievedContactDetailsList and
         // MoreContactDetailsList in order to do so.
-
-        ImageView bigImage = (ImageView) getActivity().findViewById(R.id.bigProfilePic);
-        new LoadImage(bigImage).execute(if_MoreContactDetailsList.get(position).getLargeImageURL()); // Set big image
-                                                                                                // Check LoadImage.java for more details
-                                                                                                // Issue, it takes so long to load
+//
+//        ImageView bigImage = (ImageView) getActivity().findViewById(R.id.bigProfilePic);
+//        new LoadImage(bigImage).execute(if_MoreContactDetailsList.get(position).getLargeImageURL()); // Set big image
+//                                                                                                // Check LoadImage.java for more details
+//                                                                                                // Issue, it takes so long to load
         TextView employeeName = (TextView) getActivity().findViewById(R.id.nameLine); // Set name
         employeeName.setText(if_RetrievedContactDetailsList.get(position).getName());
 
-        TextView companyName = (TextView) getActivity().findViewById(R.id.company); // Set company
-        companyName.setText(if_RetrievedContactDetailsList.get(position).getCompany());
-
-        TextView streetAddress = (TextView) getActivity().findViewById(R.id.street); // Set street
-        streetAddress.setText(if_MoreContactDetailsList.get(position).getAddress().getStreet());
-
-        TextView cityStateZip = (TextView) getActivity().findViewById(R.id.city_state_zip); // Set city-state-zip
-        cityStateZip.setText(if_MoreContactDetailsList.get(position).getAddress().getCity() + ", "
-                + if_MoreContactDetailsList.get(position).getAddress().getState() + " "
-                + if_MoreContactDetailsList.get(position).getAddress().getZip());
-
-        TextView emailAddress = (TextView) getActivity().findViewById(R.id.email); // Set E-Mail
-        emailAddress.setText(if_MoreContactDetailsList.get(position).getEmail());
-
-        TextView work_num = (TextView) getActivity().findViewById(R.id.phone_work); // Set Work Number
-        work_num.setText(getResources().getString(R.string.label_work) + "     " + if_RetrievedContactDetailsList.get(position).getPhone().getWork());
-
-        TextView home_num = (TextView) getActivity().findViewById(R.id.phone_home); // Set Home Number
-        home_num.setText(getResources().getString(R.string.label_home) + "   " + if_RetrievedContactDetailsList.get(position).getPhone().getHome());
-
-        TextView mobile_num = (TextView) getActivity().findViewById(R.id.phone_mobile); // Set Mobile Number
-        mobile_num.setText(getResources().getString(R.string.label_mobile) + "  " + if_RetrievedContactDetailsList.get(position).getPhone().getMobile());
-
-        TextView birthdate = (TextView) getActivity().findViewById(R.id.birthdate); // Set Birthday
-        birthdate.setText(getDateFromUnix(if_RetrievedContactDetailsList.get(position).getBirthdate()));
+//        TextView companyName = (TextView) getActivity().findViewById(R.id.company); // Set company
+//        companyName.setText(if_RetrievedContactDetailsList.get(position).getCompany());
+//
+//        TextView streetAddress = (TextView) getActivity().findViewById(R.id.street); // Set street
+//        streetAddress.setText(if_MoreContactDetailsList.get(position).getAddress().getStreet());
+//
+//        TextView cityStateZip = (TextView) getActivity().findViewById(R.id.city_state_zip); // Set city-state-zip
+//        cityStateZip.setText(if_MoreContactDetailsList.get(position).getAddress().getCity() + ", "
+//                + if_MoreContactDetailsList.get(position).getAddress().getState() + " "
+//                + if_MoreContactDetailsList.get(position).getAddress().getZip());
+//
+//        TextView emailAddress = (TextView) getActivity().findViewById(R.id.email); // Set E-Mail
+//        emailAddress.setText(if_MoreContactDetailsList.get(position).getEmail());
+//
+//        TextView work_num = (TextView) getActivity().findViewById(R.id.phone_work); // Set Work Number
+//        work_num.setText(getResources().getString(R.string.label_work) + "     " + if_RetrievedContactDetailsList.get(position).getPhone().getWork());
+//
+//        TextView home_num = (TextView) getActivity().findViewById(R.id.phone_home); // Set Home Number
+//        home_num.setText(getResources().getString(R.string.label_home) + "   " + if_RetrievedContactDetailsList.get(position).getPhone().getHome());
+//
+//        TextView mobile_num = (TextView) getActivity().findViewById(R.id.phone_mobile); // Set Mobile Number
+//        mobile_num.setText(getResources().getString(R.string.label_mobile) + "  " + if_RetrievedContactDetailsList.get(position).getPhone().getMobile());
+//
+//        TextView birthdate = (TextView) getActivity().findViewById(R.id.birthdate); // Set Birthday
+//        birthdate.setText(getDateFromUnix(if_RetrievedContactDetailsList.get(position).getBirthdate()));
 
         mCurrentPosition = position; // Update position
 

@@ -35,11 +35,11 @@ import java.util.List;
 public class ContactFragment extends ListFragment {
     OnContactSelectedListener mCallback;
 
-    List<ContactDetails> retrievedContactDetailsList; // Initialize a list of class ContactDetails
+    List<UserInfo> retrievedContactDetailsList; // Initialize a list of class ContactDetails
                                                     // Because the JSON used contains an array of
                                                     // contacts, we need to pull out a full list,
                                                     // not just a single contact.
-    List<MoreContactDetails> MoreContactDetailsList; // Initialize a list of the class MoreContactDetails
+   // List<MoreContactDetails> MoreContactDetailsList; // Initialize a list of the class MoreContactDetails
                                                     // Which contains objects that have more date for each
                                                     // contact, pulled from their respective DetailsURL
                                                     // Check out MoreContactDetails.Class for more details
@@ -56,8 +56,8 @@ public class ContactFragment extends ListFragment {
 
         View view =inflater.inflate(R.layout.fragment_contact_list, container, false); // Set our fragment_contact_list.xml as our view (list view)
 
-        retrievedContactDetailsList = MainActivity.ContactDetailsList; // pull in the ContactDetails list from MainActivity's call of RetrieveContactDetails
-        MoreContactDetailsList = MainActivity.MoreContactDetailsList; // Pull out this date from MainActivity. I hope this isn't making things hella slow
+        retrievedContactDetailsList = MainActivity.FriendDetailList; // pull in the ContactDetails list from MainActivity's call of RetrieveContactDetails
+        //MoreContactDetailsList = MainActivity.MoreContactDetailsList; // Pull out this date from MainActivity. I hope this isn't making things hella slow
         // Question: Is this a smart thing to do? I'm not sure yet
 
         CustomAdapter adapter = new CustomAdapter(getActivity(), // Here we use our CustomAdapter to set up our list items.
@@ -66,7 +66,7 @@ public class ContactFragment extends ListFragment {
                                                                 // of objects we are pulling values from.
                                                                 // Check out CustomAdapter.Java for more info
 
-                R.layout.fragment_contact_list_item, retrievedContactDetailsList, MoreContactDetailsList);
+                R.layout.fragment_contact_list_item, retrievedContactDetailsList);//, MoreContactDetailsList);
 
 
         setListAdapter(adapter); // set it as our list adapter

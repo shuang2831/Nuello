@@ -1,5 +1,6 @@
 package com.example.stan.phonebook;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,9 +16,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -41,25 +64,30 @@ public class MainActivity extends AppCompatActivity
         implements ContactFragment.OnContactSelectedListener {
 
     // ew, static variables, but they get the job done for now. Given more time I'd find a way to replace them
-    static List<ContactDetails> ContactDetailsList; // List of contacts and their base info
-    static List<MoreContactDetails> MoreContactDetailsList = new ArrayList<MoreContactDetails>(); // List of contacts' extra info
+    static List<UserInfo> FriendDetailList; // List of contacts and their base info
+    //static List<MoreContactDetails> MoreContactDetailsList = new ArrayList<MoreContactDetails>(); // List of contacts' extra info
+
+    private String userID;
+    private List<UserInfo> temp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        try {
-            ContactDetailsList = new RetrieveContacts().execute().get(); // Pull out a list of Contacts (and their data; check out ContactDetails.class)
 
-            for(int numContacts = 0; numContacts < ContactDetailsList.size(); numContacts++){
+        SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME,Context.MODE_PRIVATE);
+        userID = sharedPreferences.getString(Config.UID_SHARED_PREF, "0");
 
-                MoreContactDetailsList.add(numContacts, new RetrieveContactsMoreDetails().execute(ContactDetailsList.get(numContacts).getDetailsURL()).get());
-                // in a for loop (I'm wondering if this is suitable...), pull out the extra details from each contact using the DetailsURL of each one,
-                // and put it into a list "MoreContactDetailsList"
-            }
+        refresh(true);
+        temp = FriendDetailList;
 
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-
-        }
+        //            //ContactDetailsList = new RetrieveContacts().execute().get(); // Pull out a list of Contacts (and their data; check out ContactDetails.class)
+//
+//            for(int numContacts = 0; numContacts < ContactDetailsList.size(); numContacts++){
+//
+//                //MoreContactDetailsList.add(numContacts, new RetrieveContactsMoreDetails().execute(ContactDetailsList.get(numContacts).getDetailsURL()).get());
+//                // in a for loop (I'm wondering if this is suitable...), pull out the extra details from each contact using the DetailsURL of each one,
+//                // and put it into a list "MoreContactDetailsList"
+        //refresh();
+//
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -73,23 +101,25 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "For the Future: Add Contacts!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                openFriendFunctions();
+//                Snackbar.make(view, "For the Future: Add Contacts!", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 
-        if (findViewById(R.id.fragment_container) != null) {
-
-            // Create an instance of ContactFragment
-            ContactFragment firstFragment = new ContactFragment();
-
-            // Pass extras as arguments
-            firstFragment.setArguments(getIntent().getExtras());
-
-            // Add the fragment to the 'fragment_container' FrameLayout
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, firstFragment).commit();
-        }
+//        if (findViewById(R.id.fragment_container) != null) {
+//
+//            // Create an instance of ContactFragment
+//            ContactFragment firstFragment = new ContactFragment();
+//
+//            // Pass extras as arguments
+//            firstFragment.setArguments(getIntent().getExtras());
+//
+//            // Add the fragment to the 'fragment_container' FrameLayout
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.fragment_container, firstFragment).commit();
+//        }
 
     }
 
@@ -151,6 +181,88 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
 
     }
+    public void openFriendFunctions() {
+        // The user selected a contact form the list!
+
+        // Create fragment and give it an argument for which contact was selected
+        FriendFragment newFragment = new FriendFragment();
+        Bundle args = new Bundle();
+//        args.putInt(InfoFragment.ARG_POSITION, position);
+//        newFragment.setArguments(args);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        // Replace current fragment in the fragment_container view (ContactFragment) with this fragment (InfoFragment),
+        // and add the transaction to the back stack
+        transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right);
+        transaction.replace(R.id.fragment_container, newFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction (bring up the new view)
+        transaction.commit();
+
+    }
+
+    private void refresh(boolean firstRun){
+        //Getting values from edit texts
+        //loading = ProgressDialog.show(this,"Logging in...","Fetching...",false,false);
+        final boolean firstRunx = firstRun;
+        //Creating a string request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.RETRIEVE_MOODS_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        List<UserInfo> list;
+                        ObjectMapper mapper = new ObjectMapper();
+                        try {
+                            list = mapper.readValue(response, new TypeReference<List<UserInfo>>() { // use the mapper to read values
+                            });
+                            Collections.sort(list);
+                            FriendDetailList = list; // return when finished
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+
+                        if(firstRunx == true) {
+                            if (findViewById(R.id.fragment_container) != null) {
+
+                                // Create an instance of ContactFragment
+                                ContactFragment firstFragment = new ContactFragment();
+
+                                // Pass extras as arguments
+                                firstFragment.setArguments(getIntent().getExtras());
+
+                                // Add the fragment to the 'fragment_container' FrameLayout
+                                getSupportFragmentManager().beginTransaction()
+                                        .add(R.id.fragment_container, firstFragment).commit();
+                            }
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //You can handle error here if you want
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String,String> params = new HashMap<>();
+                //Adding parameters to request
+                params.put(Config.KEY_UID, userID);
+
+                //returning parameter
+                return params;
+            }
+        };
+
+        //Adding the string request to the queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
 
     //Logout function
     private void logout(){
@@ -194,5 +306,13 @@ public class MainActivity extends AppCompatActivity
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
 
+    }
+
+    public void onInfoFragmentInteraction(String string) {
+        // Do stuff
+    }
+
+    public void onFriendFragmentInteraction(String string) {
+        // Do different stuff
     }
 }

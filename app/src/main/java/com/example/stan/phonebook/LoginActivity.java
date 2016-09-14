@@ -33,6 +33,7 @@ package com.example.stan.phonebook;
 //
 //}
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -56,6 +57,9 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Defining views
@@ -63,6 +67,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText PasswordET;
     private AppCompatButton buttonLogin;
     private TextView buttonRegister;
+    private ProgressDialog loading;
 
     //boolean variable to check user is logged in or not
     //initially it is false
@@ -107,16 +112,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void login(){
         //Getting values from edit texts
-        final String email = UsernameET.getText().toString().trim();
+        final String username = UsernameET.getText().toString().trim();
         final String password = PasswordET.getText().toString().trim();
+
+        loading = ProgressDialog.show(this,"Logging in...","Fetching...",false,false);
 
         //Creating a string request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.LOGIN_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
+                        String name = "";
+                        String uid = "";
+                        String email = "";
+                        String accepted = "";
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray login_response = jsonObject.getJSONArray(Config.LOGIN_JSON_ARRAY);
+                            JSONObject loginData = login_response.getJSONObject(0);
+                            name = loginData.getString(Config.KEY_NAME);
+                            email = loginData.getString(Config.KEY_EMAIL);
+                            uid = loginData.getString(Config.KEY_UID);
+                            accepted = loginData.getString(Config.KEY_ACCEPTED);
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         //If we are getting success from server
-                        if(response.equalsIgnoreCase(Config.LOGIN_SUCCESS)){
+                        if(accepted.equalsIgnoreCase(Config.LOGIN_SUCCESS)){
                             //Creating a shared preference
                             SharedPreferences sharedPreferences = LoginActivity.this.getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
@@ -126,6 +150,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             //Adding values to editor
                             editor.putBoolean(Config.LOGGEDIN_SHARED_PREF, true);
                             editor.putString(Config.EMAIL_SHARED_PREF, email);
+                            editor.putString(Config.UID_SHARED_PREF, uid);
+                            editor.putString(Config.NAME_SHARED_PREF, name);
+                            editor.putString(Config.USERNAME_SHARED_PREF, username);
 
                             //Saving values to editor
                             editor.commit();
@@ -150,7 +177,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
                 //Adding parameters to request
-                params.put(Config.KEY_EMAIL, email);
+                params.put(Config.KEY_USERNAME, username);
                 params.put(Config.KEY_PASSWORD, password);
 
                 //returning parameter

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class CustomAdapter extends BaseAdapter {
     private LayoutInflater inflater; // inflater
     private int resource = 0;   // The view
     private List<UserInfo> contact_list; // our list of contacts
-    private List<MoreContactDetails> more_contact_list; // our list of extra info per contact
+    //private List<MoreContactDetails> more_contact_list; // our list of extra info per contact
 
     private class ViewHolder {
         TextView NameTextView; // Name TextView
@@ -43,13 +44,13 @@ public class CustomAdapter extends BaseAdapter {
         ImageView favStar;      // Favorite Star
     }
 
-    public CustomAdapter(Context context, int resource, List<UserInfo> contact_list, List<MoreContactDetails> more_contact_list) {
+    public CustomAdapter(Context context, int resource, List<UserInfo> contact_list){//, List<MoreContactDetails> more_contact_list) {
 
-        // Contructor would get these values from its paramters and set them.
+        // Constructor would get these values from its paramters and set them.
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.contact_list = contact_list;
-        this.more_contact_list = more_contact_list;
+        //this.more_contact_list = more_contact_list;
         this.resource = resource;
 
     }
@@ -96,15 +97,15 @@ public class CustomAdapter extends BaseAdapter {
         // Make sure to check the Slow Loading Image section in the documentation to see some of the issues
         // That are arriving when we use this. Images are just not loading efficiently enough.
 
-        if(more_contact_list.get(position).isFavorite()) {
-
-            Drawable myStar = context.getResources().getDrawable(R.drawable.ic_star_border_black_36dp);
-            holder.favStar.setImageDrawable(myStar);
-        } else {
-
-            Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
-            holder.favStar.setImageDrawable(transparentDrawable);
-        }
+//        if(more_contact_list.get(position).isFavorite()) {
+//
+//            Drawable myStar = context.getResources().getDrawable(R.drawable.ic_star_border_black_36dp);
+//            holder.favStar.setImageDrawable(myStar);
+//        } else {
+//
+//            Drawable transparentDrawable = new ColorDrawable(Color.TRANSPARENT);
+//            holder.favStar.setImageDrawable(transparentDrawable);
+//        }
 
         return convertView; // of course, return the view
     }
