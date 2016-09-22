@@ -2,21 +2,33 @@
 
 <!--
        This is the list view for the first fragment! Pretty simple here,
-       not much to talk about. It allos scrolling behaviour though which
+       not much to talk about. It allows scrolling behaviour though which
        is nice.
    -->
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <ListView
-        android:focusable="false"
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@android:id/list"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_height="match_parent">
+
+    <!--android:id="@android:id/list"-->
+        <android.support.v7.widget.RecyclerView
+            android:focusable="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listings_view"
+            android:background="@color/colorPrimaryDark"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </LinearLayout>

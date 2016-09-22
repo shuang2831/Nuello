@@ -147,8 +147,7 @@
         android:id="@+id/emailLabel"
         android:layout_above="@+id/email"
         android:layout_alignLeft="@+id/email"
-        android:layout_alignStart="@+id/email"
-        android:layout_marginTop="25dp" />
+        android:layout_alignStart="@+id/email" />
 
     <!--
        E-Mail

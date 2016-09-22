@@ -6,7 +6,7 @@
     android:padding="6dip"
     android:descendantFocusability="blocksDescendants">
 
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/profilePic"
         android:focusable="false"
         android:layout_width="50dp"

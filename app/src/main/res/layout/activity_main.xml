@@ -1,70 +1,175 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
 
-<!--
+<!--&lt;!&ndash;-->
 
-This xml is the fragment container for our 2 fragments. As the container, it
-implements a toolbar that should come in handy for some operations later
-in development.
+<!--This xml is the fragment container for our 2 fragments. As the container, it-->
+<!--implements a toolbar that should come in handy for some operations later-->
+<!--in development.-->
 
--->
-
-
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:fitsSystemWindows="true"
-    android:id="@+id/fragment_container"
-    tools:context=".MainActivity">
+<!--&ndash;&gt;-->
 
 
+<!--<android.support.design.widget.CoordinatorLayout-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" android:fitsSystemWindows="true"-->
+    <!--android:id="@+id/fragment_container"-->
+    <!--tools:context=".MainActivity">-->
 
 
-    <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
-        android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay"
-       >
 
-        <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
-            android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" android:theme="@style/AppTheme.AppBarOverlay"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+    <!--<android.support.design.widget.AppBarLayout android:layout_height="wrap_content"-->
+        <!--android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay"-->
+        <!--app:elevation="0dp"-->
+       <!--&gt;-->
+
+        <!--&lt;!&ndash;<android.support.v7.widget.Toolbar android:id="@+id/toolbar"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:background="?attr/colorPrimary" android:theme="@style/AppTheme.AppBarOverlay"&ndash;&gt;-->
+            <!--&lt;!&ndash;app:popupTheme="@style/AppTheme.PopupOverlay" />&ndash;&gt;-->
+
+        <!--<android.support.design.widget.TabLayout-->
+            <!--android:id="@+id/tab_selector"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="match_parent">-->
+
+            <!--<android.support.design.widget.TabItem-->
+                <!--android:text="@string/tab_text"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"/>-->
+
+            <!--<android.support.design.widget.TabItem-->
+                <!--android:icon="@drawable/ic_launcher"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"/>-->
+
+        <!--</android.support.design.widget.TabLayout>-->
+
+    <!--</android.support.design.widget.AppBarLayout>-->
+
+
+    <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/viewpager"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0px"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@android:color/white" />-->
+
+
+    <!--&lt;!&ndash;-->
+        <!--This is the first fragment.-->
+    <!--&ndash;&gt;-->
+    <!--<FrameLayout-->
+        <!--android:id="@+id/fragment"-->
+        <!--android:name="com.example.stan.phonebook.contactFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--tools:layout="@layout/fragment_contact_list_item"-->
+        <!--android:layout_below="@id/tab_selector"-->
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+    <!--</FrameLayout>-->
+
+
+    <!--&lt;!&ndash;-->
+       <!--This is the second fragment.-->
+   <!--&ndash;&gt;-->
+
+    <!--<FrameLayout-->
+        <!--android:layout_below="@+id/tab_selector"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--class="com.example.stan.phonebook.InfoFragment"-->
+        <!--android:id="@+id/fragment2"-->
+        <!--tools:layout="@layout/fragment_info"-->
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+    <!--</FrameLayout>-->
+
+
+    <!--<FrameLayout-->
+        <!--android:layout_below="@+id/tab_selector"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--class="com.example.stan.phonebook.FriendFragment"-->
+        <!--android:id="@+id/fragment3"-->
+        <!--tools:layout="@layout/fragment_add_friend"-->
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+
+    <!--</FrameLayout>-->
+
+    <!--&lt;!&ndash;-->
+          <!--This is the action button! I want to have it add contacts later on-->
+    <!--&ndash;&gt;-->
+
+    <!--<android.support.design.widget.FloatingActionButton android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="end|bottom" android:layout_margin="@dimen/fab_margin"-->
+        <!--android:src="@drawable/ic_add_white_24dp" />-->
+
+
+
+<!--</android.support.design.widget.CoordinatorLayout>-->
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="match_parent" android:layout_width="match_parent"
+    android:orientation="horizontal">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginBottom="32dp"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_main"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <!--
-        This is the first fragment.
-    -->
-    <FrameLayout
-        android:id="@+id/fragment"
-        android:name="com.example.stan.phonebook.contactFragment"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_contact_list_item"
-        android:layout_below="@id/toolbar"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appbar"
+        />
 
-    <!--
-       This is the second fragment.
-   -->
+
+    <android.support.v4.view.ViewPager android:id="@+id/vpPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_below="@id/sliding_tabs">
+
+
+        </android.support.v4.view.ViewPager>
 
     <FrameLayout
-        android:layout_below="@+id/toolbar"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         class="com.example.stan.phonebook.InfoFragment"
-        android:id="@+id/fragment2"
-        tools:layout="@layout/fragment_info" />
+        android:id="@+id/fragment_container"
+        tools:layout="@layout/fragment_info"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    </FrameLayout>
 
-    <!--
-          This is the action button! I want to have it add contacts later on
-    -->
-
-    <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom" android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_white_24dp" />
-
-
-
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

@@ -1,13 +1,24 @@
 
 package com.example.stan.phonebook;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,6 +41,17 @@ import java.util.TimeZone;
  */
 
 public class InfoFragment extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    Toolbar toolbar;
+    CollapsingToolbarLayout collapsingToolbar;
+    int mutedColor;
+
+    private NetworkImageView propic;
+    private ImageLoader imageLoader;
+
     final static String ARG_POSITION = "position";
     int mCurrentPosition = -1;
     List<UserInfo> if_RetrievedContactDetailsList; // Initialize a list of class ContactDetails
@@ -44,6 +66,15 @@ public class InfoFragment extends Fragment {
                                                     // contact, pulled from their respective DetailsURL
                                                     // Check out MoreContactDetails.Class for more details
 
+
+//    public static InfoFragment newInstance(String position) {
+//        InfoFragment fragment = new InfoFragment();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_POSITION, position);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,9 +85,36 @@ public class InfoFragment extends Fragment {
         if (savedInstanceState != null) {
             mCurrentPosition = savedInstanceState.getInt(ARG_POSITION); // Save the position
         }
+        mCurrentPosition = getArguments().getInt("position");
+        View view = inflater.inflate(R.layout.fragment_friend_info, container, false);
+
+        toolbar = (Toolbar) view.findViewById(R.id.anim_toolbar);
+        ((MainActivity)getActivity()).setSupportActionBar(toolbar);
+        collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle("Suleiman Ali Shakir");
+
+        propic = (NetworkImageView) view.findViewById(R.id.header);
+        imageLoader = LoadImage.getInstance(getActivity().getApplicationContext())
+                .getImageLoader();
+        imageLoader.get(if_RetrievedContactDetailsList.get(mCurrentPosition).getPropicLocation(), ImageLoader.getImageListener(propic,
+                R.drawable.ic_launcher, android.R.drawable
+                        .ic_dialog_alert));
+        propic.setImageUrl(if_RetrievedContactDetailsList.get(mCurrentPosition).getPropicLocation(), imageLoader);
+
+        //ImageView header = (ImageView) view.findViewById(R.id.header);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.smug);
+        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+            @Override
+            public void onGenerated(Palette palette) {
+                mutedColor = palette.getMutedColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                collapsingToolbar.setContentScrimColor(mutedColor);
+            }
+        });
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_info, container, false);
+
         return view; // return view
     }
 
@@ -86,8 +144,8 @@ public class InfoFragment extends Fragment {
 //        new LoadImage(bigImage).execute(if_MoreContactDetailsList.get(position).getLargeImageURL()); // Set big image
 //                                                                                                // Check LoadImage.java for more details
 //                                                                                                // Issue, it takes so long to load
-        TextView employeeName = (TextView) getActivity().findViewById(R.id.nameLine); // Set name
-        employeeName.setText(if_RetrievedContactDetailsList.get(position).getName());
+//        TextView employeeName = (TextView) getActivity().findViewById(R.id.nameLine); // Set name
+//        employeeName.setText(if_RetrievedContactDetailsList.get(position).getName());
 
 //        TextView companyName = (TextView) getActivity().findViewById(R.id.company); // Set company
 //        companyName.setText(if_RetrievedContactDetailsList.get(position).getCompany());
@@ -114,6 +172,7 @@ public class InfoFragment extends Fragment {
 //
 //        TextView birthdate = (TextView) getActivity().findViewById(R.id.birthdate); // Set Birthday
 //        birthdate.setText(getDateFromUnix(if_RetrievedContactDetailsList.get(position).getBirthdate()));
+
 
         mCurrentPosition = position; // Update position
 

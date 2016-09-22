@@ -6,6 +6,18 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v4.util.LruCache;
+
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.ImageLoader;
+
 import java.io.InputStream;
 
 /**
@@ -22,27 +34,79 @@ import java.io.InputStream;
  * working. I'd love to learn about how to do it efficiently, and well, have it work too.
  *
  */
-public class LoadImage extends AsyncTask<String, Void, Bitmap> {
-    ImageView bmImage;
+//public class LoadImage extends AsyncTask<String, Void, Bitmap> {
+//    ImageView bmImage;
+//
+//    public LoadImage(ImageView bmImage) {
+//        this.bmImage = bmImage;
+//    }
+//
+//    protected Bitmap doInBackground(String... urls) {
+//        String url = urls[0]; // Grab the url
+//        Bitmap mIcon = null;
+//        try {
+//            InputStream in = new java.net.URL(url).openStream();
+//            mIcon = BitmapFactory.decodeStream(in); // decode the url and get a Bitmap
+//        } catch (Exception e) {
+//            Log.e("Error", e.getMessage());
+//        }
+//        return mIcon; // Return the bitmap
+//    }
+//
+//    protected void onPostExecute(Bitmap result) {
+//        bmImage.setImageBitmap(result);
+//    }
+//
+//}
 
-    public LoadImage(ImageView bmImage) {
-        this.bmImage = bmImage;
+public class LoadImage {
+
+    private static LoadImage loadImage;
+    private static Context context;
+    private RequestQueue requestQueue;
+    private ImageLoader imageLoader;
+
+
+    private LoadImage(Context context) {
+        this.context = context;
+        this.requestQueue = getRequestQueue();
+
+        imageLoader = new ImageLoader(requestQueue,
+                new ImageLoader.ImageCache() {
+                    private final LruCache<String, Bitmap>
+                            cache = new LruCache<String, Bitmap>(20);
+
+                    @Override
+                    public Bitmap getBitmap(String url) {
+                        return cache.get(url);
+                    }
+
+                    @Override
+                    public void putBitmap(String url, Bitmap bitmap) {
+                        cache.put(url, bitmap);
+                    }
+                });
     }
 
-    protected Bitmap doInBackground(String... urls) {
-        String url = urls[0]; // Grab the url
-        Bitmap mIcon = null;
-        try {
-            InputStream in = new java.net.URL(url).openStream();
-            mIcon = BitmapFactory.decodeStream(in); // decode the url and get a Bitmap
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
+    public static synchronized LoadImage getInstance(Context context) {
+        if (loadImage == null) {
+            loadImage = new LoadImage(context);
         }
-        return mIcon; // Return the bitmap
+        return loadImage;
     }
 
-    protected void onPostExecute(Bitmap result) {
-        bmImage.setImageBitmap(result);
+    public RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            Cache cache = new DiskBasedCache(context.getCacheDir(), 10 * 1024 * 1024);
+            Network network = new BasicNetwork(new HurlStack());
+            requestQueue = new RequestQueue(cache, network);
+            requestQueue.start();
+        }
+        return requestQueue;
+    }
+
+    public ImageLoader getImageLoader() {
+        return imageLoader;
     }
 
 }

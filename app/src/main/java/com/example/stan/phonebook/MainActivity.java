@@ -1,6 +1,7 @@
 package com.example.stan.phonebook;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,11 +9,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+
 /**
  *
  * Created by Stan on 1/30/2016.
@@ -66,9 +74,15 @@ public class MainActivity extends AppCompatActivity
     // ew, static variables, but they get the job done for now. Given more time I'd find a way to replace them
     static List<UserInfo> FriendDetailList; // List of contacts and their base info
     //static List<MoreContactDetails> MoreContactDetailsList = new ArrayList<MoreContactDetails>(); // List of contacts' extra info
-
+    FragmentPagerAdapter adapterViewPager;
     private String userID;
-    private List<UserInfo> temp;
+    ViewPager vpPager;
+    private SearchView mSearchView;
+    private String mSearchString;
+
+
+    private int PICK_IMAGE_REQUEST = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +91,6 @@ public class MainActivity extends AppCompatActivity
         userID = sharedPreferences.getString(Config.UID_SHARED_PREF, "0");
 
         refresh(true);
-        temp = FriendDetailList;
 
         //            //ContactDetailsList = new RetrieveContacts().execute().get(); // Pull out a list of Contacts (and their data; check out ContactDetails.class)
 //
@@ -91,23 +104,51 @@ public class MainActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar); // Setting up the toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main); // Setting up the toolbar
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+//        TabLayout tabs = (TabLayout) findViewById(R.id.tab_selector);
+//
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                openFriendFunctions();
+////                Snackbar.make(view, "For the Future: Add Contacts!", Snackbar.LENGTH_LONG)
+////                        .setAction("Action", null).show();
+//            }
+//        });
 
-                openFriendFunctions();
-//                Snackbar.make(view, "For the Future: Add Contacts!", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+        vpPager = (ViewPager) findViewById(R.id.vpPager);
+        adapterViewPager = new MyFragmentPagerAdapter(getSupportFragmentManager(), this);
+//        vpPager.setAdapter(adapterViewPager);
+        // Give the TabLayout the ViewPager
+        vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            // This method will be invoked when a new page becomes selected.
+            @Override
+            public void onPageSelected(int position) {
+                Toast.makeText(MainActivity.this,
+                        "Selected page position: " + position, Toast.LENGTH_SHORT).show();
+            }
+
+            // This method will be invoked when the current page is scrolled
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // Code goes here
+            }
+
+            // Called when the scroll state changes:
+            // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // Code goes here
             }
         });
-
 //        if (findViewById(R.id.fragment_container) != null) {
 //
 //            // Create an instance of ContactFragment
@@ -126,7 +167,42 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+       // getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+//
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+//        //final Toast toast = new Toast(mApp);
+//
+//        if (mSearchView != null )
+//        {
+//            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//            mSearchView.setIconifiedByDefault(false);
+//
+//            SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener()
+//            {
+//                public boolean onQueryTextChange(String newText)
+//                {
+//                    mSearchString = newText;
+//                    //doFilterAsync(mSearchString);
+//                    //toast.makeText(getApplicationContext(), "Test1", Toast.LENGTH_LONG).show();
+//                    return true;
+//                }
+//
+//                public boolean onQueryTextSubmit(String query)
+//                {
+//                    mSearchString = query;
+//                    //doFilterAsync(mSearchString);
+//                    //toast.makeText(getApplicationContext(), "Test2", Toast.LENGTH_LONG).show();
+//
+//                    return true;
+//                }
+//            };
+//
+//            mSearchView.setOnQueryTextListener(queryTextListener);
+//        }
+
         return true;
     }
 
@@ -135,6 +211,7 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -162,48 +239,55 @@ public class MainActivity extends AppCompatActivity
 
     public void openContactInfo(int position) {
         // The user selected a contact form the list!
-
+        //vpPager.setCurrentItem(4);
         // Create fragment and give it an argument for which contact was selected
-        InfoFragment newFragment = new InfoFragment();
-        Bundle args = new Bundle();
-        args.putInt(InfoFragment.ARG_POSITION, position);
-        newFragment.setArguments(args);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) == null) {
 
-        // Replace current fragment in the fragment_container view (ContactFragment) with this fragment (InfoFragment),
-        // and add the transaction to the back stack
-        transaction.setCustomAnimations(android.R.anim.slide_in_left,
-                android.R.anim.slide_out_right);
-        transaction.replace(R.id.fragment_container, newFragment);
-        transaction.addToBackStack(null);
+            InfoFragment newFragment = new InfoFragment();
+            Bundle args = new Bundle();
+            args.putInt(InfoFragment.ARG_POSITION, position);
+            newFragment.setArguments(args);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        // Commit the transaction (bring up the new view)
-        transaction.commit();
+            // Replace current fragment in the fragment_container view (ContactFragment) with this fragment (InfoFragment),
+            // and add the transaction to the back stack
+            transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                    android.R.anim.slide_out_right);
+            transaction.replace(R.id.fragment_container, newFragment, "detailFragment");
+            transaction.addToBackStack(null);
 
+            // Commit the transaction (bring up the new view)
+            transaction.commit();
+        }
     }
     public void openFriendFunctions() {
         // The user selected a contact form the list!
 
-        // Create fragment and give it an argument for which contact was selected
-        FriendFragment newFragment = new FriendFragment();
-        Bundle args = new Bundle();
-//        args.putInt(InfoFragment.ARG_POSITION, position);
-//        newFragment.setArguments(args);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-        // Replace current fragment in the fragment_container view (ContactFragment) with this fragment (InfoFragment),
-        // and add the transaction to the back stack
-        transaction.setCustomAnimations(android.R.anim.slide_in_left,
-                android.R.anim.slide_out_right);
-        transaction.replace(R.id.fragment_container, newFragment);
-        transaction.addToBackStack(null);
-
-        // Commit the transaction (bring up the new view)
-        transaction.commit();
+//        // Create fragment and give it an argument for which contact was selected
+//        FriendFragment newFragment = new FriendFragment();
+//        Bundle args = new Bundle();
+////        args.putInt(InfoFragment.ARG_POSITION, position);
+////        newFragment.setArguments(args);
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//
+//        // Replace current fragment in the fragment_container view (ContactFragment) with this fragment (InfoFragment),
+//        // and add the transaction to the back stack
+//        transaction.setCustomAnimations(android.R.anim.slide_in_left,
+//                android.R.anim.slide_out_right);
+//        transaction.replace(R.id.fragment_container, newFragment);
+//        transaction.addToBackStack(null);
+//
+//        // Commit the transaction (bring up the new view)
+//        transaction.commit();
 
     }
 
-    private void refresh(boolean firstRun){
+    public void sendRefreshNotice(){
+
+
+    }
+
+    public void refresh(boolean firstRun){
         //Getting values from edit texts
         //loading = ProgressDialog.show(this,"Logging in...","Fetching...",false,false);
         final boolean firstRunx = firstRun;
@@ -224,18 +308,21 @@ public class MainActivity extends AppCompatActivity
                         }
 
                         if(firstRunx == true) {
-                            if (findViewById(R.id.fragment_container) != null) {
-
-                                // Create an instance of ContactFragment
-                                ContactFragment firstFragment = new ContactFragment();
-
-                                // Pass extras as arguments
-                                firstFragment.setArguments(getIntent().getExtras());
-
-                                // Add the fragment to the 'fragment_container' FrameLayout
-                                getSupportFragmentManager().beginTransaction()
-                                        .add(R.id.fragment_container, firstFragment).commit();
-                            }
+//                            if (findViewById(R.id.fragment_container) != null) {
+//
+//                                // Create an instance of ContactFragment
+//                                ContactFragment firstFragment = new ContactFragment();
+//
+//                                // Pass extras as arguments
+//                                firstFragment.setArguments(getIntent().getExtras());
+//
+//                                // Add the fragment to the 'fragment_container' FrameLayout
+//                                getSupportFragmentManager().beginTransaction()
+//                                        .add(R.id.fragment_container, firstFragment).commit();
+//                            }
+                            vpPager.setAdapter(adapterViewPager);
+                            TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+                            tabLayout.setupWithViewPager(vpPager);
                         }
 
                     }

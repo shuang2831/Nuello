@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import android.support.v4.app.ListFragment;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -43,12 +43,13 @@ import java.util.Map;
  * Use the {@link FriendFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FriendFragment extends Fragment {
+public class FriendFragment extends ListFragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    //static List<PendingFriends> pendingFriendsList;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -109,6 +110,9 @@ public class FriendFragment extends Fragment {
         requestedUsername = (EditText) friendView.findViewById(R.id.enter_username);
         sendRequest = (AppCompatButton) friendView.findViewById(R.id.friend_request_button);
         retrieveRequests();
+
+//
+//        setListAdapter(adapter); // set it as our list adapter
         //Adding click listener
         sendRequest.setOnClickListener(new View.OnClickListener(){
 
@@ -184,14 +188,26 @@ public class FriendFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
+                        List<PendingFriends> list;
                         ObjectMapper mapper = new ObjectMapper();
                         try {
                             pendingFriendsList = mapper.readValue(response, new TypeReference<List<PendingFriends>>() { // use the mapper to read values
                             });
+                            //pendingFriendsList = list;
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
+
+                        FriendRequestAdapter adapter = new FriendRequestAdapter(getActivity(), // Here we use our CustomAdapter to set up our list items.
+                                // As you can see, fragment_contact_list_item.xml is being used
+                                // as our list item, while retrievedContactDetailsList is the list
+                                // of objects we are pulling values from.
+                                // Check out CustomAdapter.Java for more info
+
+                                R.layout.pending_friend_list_item, pendingFriendsList);//, MoreContactDetailsList);
+
+
+                        setListAdapter(adapter); // set it as our list adapter
                     }
                 },
                 new Response.ErrorListener() {

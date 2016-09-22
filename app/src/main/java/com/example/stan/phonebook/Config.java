@@ -5,12 +5,13 @@ package com.example.stan.phonebook;
  */
 public class Config {
     //URL to our login.php file
-    public static final String LOGIN_URL = "http://192.168.1.5/login.php";
-    public static final String REGISTER_URL = "http://192.168.1.5/register.php";
-    public static final String RETRIEVE_MOODS_URL = "http://192.168.1.5/getData.php";
-    public static final String ADD_FRIEND_URL = "http://192.168.1.5/addFriends.php";
-    public static final String RETRIEVE_FRIEND_REQUESTS_URL = "http://192.168.1.5/getFriendRequests.php";
-    public static final String CONFIRM_FRIEND_URL = "http://192.168.1.5/confirmFriend.php";
+    public static final String UPLOAD_IMAGE_URL = "http://10.0.0.9//uploadImage.php";
+    public static final String LOGIN_URL = "http://10.0.0.9//login.php";
+    public static final String REGISTER_URL = "http://10.0.0.9//register.php";
+    public static final String RETRIEVE_MOODS_URL = "http://10.0.0.9//getData.php";
+    public static final String ADD_FRIEND_URL = "http://10.0.0.9//addFriends.php";
+    public static final String RETRIEVE_FRIEND_REQUESTS_URL = "http://10.0.0.9//getFriendRequests.php";
+    public static final String CONFIRM_FRIEND_URL = "http://10.0.0.9//confirmFriends.php";
     //Keys for email and password as defined in our $_POST['key'] in login.php
     public static final String KEY_EMAIL = "email";
     public static final String KEY_PASSWORD = "password";
@@ -18,7 +19,8 @@ public class Config {
     public static final String KEY_UID = "uid";
     public static final String KEY_NAME = "name";
     public static final String KEY_ACCEPTED = "accepted";
-
+    public static final String KEY_ACCEPT_CODE = "accept_code";
+    public static final String IMAGE = "image";
 
     //If server response is equal to this that means login is successful
     public static final String LOGIN_SUCCESS = "success";

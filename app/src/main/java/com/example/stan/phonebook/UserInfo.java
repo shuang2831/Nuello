@@ -37,6 +37,7 @@ public class UserInfo implements Comparable<UserInfo>{
     private String topic;
     private String mood;
     private long lastUpdate;
+    private String propicLocation;
 
     //private boolean visible = true;
 
@@ -67,6 +68,11 @@ public class UserInfo implements Comparable<UserInfo>{
     }
     public long getLastUpdate(){
         return lastUpdate;
+    }
+
+    public String getPropicLocation(){
+
+        return propicLocation;
     }
 //    public boolean getVisible(){
 //
@@ -111,6 +117,12 @@ public class UserInfo implements Comparable<UserInfo>{
     public void setLastUpdate(String lu){
 
         lastUpdate = getUnix(lu);
+
+    }
+
+    public void setPropicLocation(String ppl){
+
+        propicLocation = ppl;
 
     }
 
