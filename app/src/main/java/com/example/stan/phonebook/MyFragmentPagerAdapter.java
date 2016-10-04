@@ -31,31 +31,14 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public android.support.v4.app.Fragment getItem(int position) {
         switch (position) {
-            case 0: // Fragment # 0 - This will show FirstFragment
-                return FriendFragment.newInstance("", "Page # 1");
+            case 0: // Fragment # 0 - This will show FirstFragment different title
+                return ContactFragment.newInstance("", "Page # 2");
             case 1: // Fragment # 0 - This will show FirstFragment different title
-                return ContactFragment.newInstance("", "Page # 2");
-            case 2: // Fragment # 0 - This will show FirstFragment different title
-                return ContactFragment.newInstance("", "Page # 2");
-            case 3: // Fragment # 0 - This will show FirstFragment different title
-                return ContactFragment.newInstance("", "Page # 2");
+                return ProfileFragment.newInstance();
             default:
                 return null;
         }
-//        Bundle args = new Bundle();
-////        args.putInt(InfoFragment.ARG_POSITION, position);
-////        newFragment.setArguments(args);
-//        FragmentTransaction transaction = sfm.beginTransaction();
-//
-//        // Replace current fragment in the fragment_container view (ContactFragment) with this fragment (InfoFragment),
-//        // and add the transaction to the back stack
-//        transaction.setCustomAnimations(android.R.anim.slide_in_left,
-//                android.R.anim.slide_out_right);
-//        transaction.replace(R.id.fragment_container, newFragment);
-//        transaction.addToBackStack(null);
-//
-//        // Commit the transaction (bring up the new view)
-//        transaction.commit();
+
     }
 
     @Override

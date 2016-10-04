@@ -9,6 +9,7 @@ public class Config {
     public static final String LOGIN_URL = "http://10.0.0.9//login.php";
     public static final String REGISTER_URL = "http://10.0.0.9//register.php";
     public static final String RETRIEVE_MOODS_URL = "http://10.0.0.9//getData.php";
+    public static final String GET_MY_DATA_URL = "http://10.0.0.9//getMyData.php";
     public static final String ADD_FRIEND_URL = "http://10.0.0.9//addFriends.php";
     public static final String RETRIEVE_FRIEND_REQUESTS_URL = "http://10.0.0.9//getFriendRequests.php";
     public static final String CONFIRM_FRIEND_URL = "http://10.0.0.9//confirmFriends.php";
@@ -20,7 +21,7 @@ public class Config {
     public static final String KEY_NAME = "name";
     public static final String KEY_ACCEPTED = "accepted";
     public static final String KEY_ACCEPT_CODE = "accept_code";
-    public static final String IMAGE = "image";
+    public static final String KEY_IMAGE = "image";
 
     //If server response is equal to this that means login is successful
     public static final String LOGIN_SUCCESS = "success";
@@ -34,8 +35,11 @@ public class Config {
     public static final String UID_SHARED_PREF = "uid";
     public static final String USERNAME_SHARED_PREF = "username";
     public static final String NAME_SHARED_PREF = "name";
-
     public static final String LOGIN_JSON_ARRAY = "login_response";
+    public static final String MOOD_SHARED_PREF = "mood";
+    public static final String STATUS_SHARED_PREF = "status";
+    public static final String PROPIC_SHARED_PREF = "propic";
+
 
     //We will use this to store the boolean in sharedpreference to track user is loggedin or not
     public static final String LOGGEDIN_SHARED_PREF = "loggedin";

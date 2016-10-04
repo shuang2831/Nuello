@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity
     // ew, static variables, but they get the job done for now. Given more time I'd find a way to replace them
     static List<UserInfo> FriendDetailList; // List of contacts and their base info
     //static List<MoreContactDetails> MoreContactDetailsList = new ArrayList<MoreContactDetails>(); // List of contacts' extra info
+    static UserInfo myInfo;
     FragmentPagerAdapter adapterViewPager;
     private String userID;
     ViewPager vpPager;
@@ -89,7 +90,8 @@ public class MainActivity extends AppCompatActivity
 
         SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME,Context.MODE_PRIVATE);
         userID = sharedPreferences.getString(Config.UID_SHARED_PREF, "0");
-
+        myInfo = new UserInfo();
+        //getMyData();
         refresh(true);
 
         //            //ContactDetailsList = new RetrieveContacts().execute().get(); // Pull out a list of Contacts (and their data; check out ContactDetails.class)
@@ -104,28 +106,10 @@ public class MainActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main); // Setting up the toolbar
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-//        TabLayout tabs = (TabLayout) findViewById(R.id.tab_selector);
-//
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                openFriendFunctions();
-////                Snackbar.make(view, "For the Future: Add Contacts!", Snackbar.LENGTH_LONG)
-////                        .setAction("Action", null).show();
-//            }
-//        });
 
         vpPager = (ViewPager) findViewById(R.id.vpPager);
         adapterViewPager = new MyFragmentPagerAdapter(getSupportFragmentManager(), this);
-//        vpPager.setAdapter(adapterViewPager);
+        //vpPager.setAdapter(adapterViewPager);
         // Give the TabLayout the ViewPager
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -134,6 +118,10 @@ public class MainActivity extends AppCompatActivity
             public void onPageSelected(int position) {
                 Toast.makeText(MainActivity.this,
                         "Selected page position: " + position, Toast.LENGTH_SHORT).show();
+                if(position == 1){
+                    //getSupportActionBar().hide();
+                }
+
             }
 
             // This method will be invoked when the current page is scrolled
@@ -161,6 +149,13 @@ public class MainActivity extends AppCompatActivity
 //            getSupportFragmentManager().beginTransaction()
 //                    .add(R.id.fragment_container, firstFragment).commit();
 //        }
+
+
+        Toolbar mainToolbar = (Toolbar) findViewById(R.id.toolbar_main); // Setting up the toolbar
+        setSupportActionBar(mainToolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
 
@@ -223,6 +218,10 @@ public class MainActivity extends AppCompatActivity
             //calling logout method when the logout button is clicked
             logout();
         }
+        if (id == R.id.add_friend_button) {
+            //calling logout method when the logout button is clicked
+            openFriendFunctions();
+        }
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             // This causes the app to exit when the back arrow is pressed.
@@ -260,25 +259,26 @@ public class MainActivity extends AppCompatActivity
             transaction.commit();
         }
     }
+
     public void openFriendFunctions() {
         // The user selected a contact form the list!
 
-//        // Create fragment and give it an argument for which contact was selected
-//        FriendFragment newFragment = new FriendFragment();
-//        Bundle args = new Bundle();
-////        args.putInt(InfoFragment.ARG_POSITION, position);
-////        newFragment.setArguments(args);
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//
-//        // Replace current fragment in the fragment_container view (ContactFragment) with this fragment (InfoFragment),
-//        // and add the transaction to the back stack
-//        transaction.setCustomAnimations(android.R.anim.slide_in_left,
-//                android.R.anim.slide_out_right);
-//        transaction.replace(R.id.fragment_container, newFragment);
-//        transaction.addToBackStack(null);
-//
-//        // Commit the transaction (bring up the new view)
-//        transaction.commit();
+        // Create fragment and give it an argument for which contact was selected
+        FriendFragment newFragment = new FriendFragment();
+        Bundle args = new Bundle();
+//        args.putInt(InfoFragment.ARG_POSITION, position);
+//        newFragment.setArguments(args);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        // Replace current fragment in the fragment_container view (ContactFragment) with this fragment (InfoFragment),
+        // and add the transaction to the back stack
+        transaction.setCustomAnimations(android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right);
+        transaction.replace(R.id.fragment_container, newFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction (bring up the new view)
+        transaction.commit();
 
     }
 
@@ -301,6 +301,7 @@ public class MainActivity extends AppCompatActivity
                         try {
                             list = mapper.readValue(response, new TypeReference<List<UserInfo>>() { // use the mapper to read values
                             });
+                            myInfo = list.remove(list.size()-1);
                             Collections.sort(list);
                             FriendDetailList = list; // return when finished
                         } catch (IOException e1) {
@@ -321,9 +322,55 @@ public class MainActivity extends AppCompatActivity
 //                                        .add(R.id.fragment_container, firstFragment).commit();
 //                            }
                             vpPager.setAdapter(adapterViewPager);
-                            TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-                            tabLayout.setupWithViewPager(vpPager);
+//                            TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+//                            tabLayout.setupWithViewPager(vpPager);
                         }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //You can handle error here if you want
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String,String> params = new HashMap<>();
+                //Adding parameters to request
+                params.put(Config.KEY_UID, userID);
+
+                //returning parameter
+                return params;
+            }
+        };
+
+        //Adding the string request to the queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
+
+    public void getMyData(){
+        //Getting values from edit texts
+        //loading = ProgressDialog.show(this,"Logging in...","Fetching...",false,false);
+        //Creating a string request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.GET_MY_DATA_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //,,UserInfo myInfo;
+                        ObjectMapper mapper = new ObjectMapper();
+                        try {
+                            myInfo = mapper.readValue(response.substring(1, response.length()-1), UserInfo.class)  // use the mapper to read values
+                            ;
+                            //,,Collections.sort(list);
+                            //FriendDetailList = list; // return when finished
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+
 
                     }
                 },

@@ -147,9 +147,11 @@ public class ContactFragment extends Fragment {
                 new ShadowVerticalSpaceItemDecorator(getActivity(), R.drawable.drop_shadow);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         rView = (RecyclerView)view.findViewById(R.id.listings_view);
+
         rView.setLayoutManager(layoutManager);
         rView.addItemDecoration(shadowItemDecorator);
         rView.addItemDecoration(itemDecorator);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -192,6 +194,7 @@ public class ContactFragment extends Fragment {
                         try {
                             list = mapper.readValue(response, new TypeReference<List<UserInfo>>() { // use the mapper to read values
                             });
+                            MainActivity.myInfo = list.remove(list.size()-1);
                             Collections.sort(list);
                             //retrievedContactDetailsList = list; // return when finished
                             adapter.clear();

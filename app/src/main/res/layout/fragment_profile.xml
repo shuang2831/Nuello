@@ -1,0 +1,194 @@
+
+
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/scrollableview"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/White"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context="com.example.stan.phonebook.InfoFragment"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        >
+
+    <android.support.design.widget.CollapsingToolbarLayout
+        android:id="@+id/collapsing_toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="0dp"
+        android:fitsSystemWindows="true"
+        app:titleEnabled="true"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed">
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="192dp"
+            android:fitsSystemWindows="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:scaleType="centerCrop"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/change_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/ic_add_white_24dp"
+            app:layout_anchor="@+id/header"
+            app:layout_anchorGravity="bottom|right|end"
+            android:layout_marginRight="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_above="@+id/relativeLayout"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="25dp" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:minHeight="0dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_collapseMode="pin" />
+    </android.support.design.widget.CollapsingToolbarLayout>
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/White"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            tools:context="com.example.stan.phonebook.InfoFragment"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:id="@+id/relativeLayout"
+        android:layout_below="@+id/collapsing_toolbar_layout"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Mood"
+            android:id="@+id/mood_title"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/change_mood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/White"
+            android:padding="12dp"
+            android:text="Change Mood"
+            android:layout_below="@+id/mood_title"
+            android:layout_alignEnd="@+id/change_status"
+            android:layout_alignStart="@+id/change_status" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Status"
+                android:id="@+id/status_title"
+            android:layout_alignTop="@+id/view2"
+            android:layout_alignLeft="@+id/mood_title"
+            android:layout_marginTop="10dp"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/change_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/White"
+            android:padding="12dp"
+            android:text="Change Status"
+            android:layout_below="@+id/status_title"
+            android:layout_toEndOf="@+id/change_ci" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Currently Into"
+            android:id="@+id/ci_title"
+            android:layout_centerVertical="true"
+            android:layout_alignStart="@+id/status_title"
+            android:layout_marginTop="10dp"
+            android:layout_alignTop="@+id/view"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/change_ci"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/White"
+            android:padding="12dp"
+            android:text="Edit"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="26dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="55dp"
+            android:layout_below="@+id/mood_title"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/view2" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:id="@+id/view"
+            android:layout_marginTop="55dp"
+            android:layout_below="@+id/status_title"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mood_profile"
+
+            android:layout_alignBottom="@+id/change_mood"
+            android:layout_alignStart="@+id/mood_title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/status_profile"
+            android:gravity="center"
+            android:layout_alignTop="@+id/change_status"
+            android:layout_alignStart="@+id/status_title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/currently_into_profile"
+            android:layout_alignStart="@+id/ci_title"
+            android:layout_above="@+id/change_ci"
+            android:layout_alignEnd="@+id/change_status"
+            android:layout_below="@+id/ci_title" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+

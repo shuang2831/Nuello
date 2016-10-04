@@ -138,9 +138,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             accepted = loginData.getString(Config.KEY_ACCEPTED);
                         }catch (JSONException e) {
                             e.printStackTrace();
+                            loading.dismiss();
                         }
                         //If we are getting success from server
                         if(accepted.equalsIgnoreCase(Config.LOGIN_SUCCESS)){
+
+
                             //Creating a shared preference
                             SharedPreferences sharedPreferences = LoginActivity.this.getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
 

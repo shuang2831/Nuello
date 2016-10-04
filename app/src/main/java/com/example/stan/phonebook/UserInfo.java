@@ -31,13 +31,19 @@ import java.util.TimeZone;
 public class UserInfo implements Comparable<UserInfo>{
 
     private int uid;
-    private String name;
+    private String name = "???";
     private String username;
     private String status;
     private String topic;
     private String mood;
     private long lastUpdate;
-    private String propicLocation;
+    private String propicLocation = "http://10.0.0.9/Propics/astronaut-helmet.png";
+
+    public void UserInfo(){
+
+        propicLocation = "http://10.0.0.9/Propics/astronaut-helmet.png";
+        name = "???";
+    }
 
     //private boolean visible = true;
 

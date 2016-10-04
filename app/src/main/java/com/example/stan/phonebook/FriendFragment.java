@@ -231,6 +231,16 @@ public class FriendFragment extends ListFragment  {
         requestQueue.add(FriendsStringRequest);
     }
 
+    // A method to find height of the status bar
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

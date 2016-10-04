@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +53,9 @@ public class InfoFragment extends Fragment {
 
     private NetworkImageView propic;
     private ImageLoader imageLoader;
+    private ImageView moodPng;
+    private TextView availability;
+    private TextView currentlyInto;
 
     final static String ARG_POSITION = "position";
     int mCurrentPosition = -1;
@@ -91,15 +96,38 @@ public class InfoFragment extends Fragment {
         toolbar = (Toolbar) view.findViewById(R.id.anim_toolbar);
         ((MainActivity)getActivity()).setSupportActionBar(toolbar);
         collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("Suleiman Ali Shakir");
+        collapsingToolbar.setTitle(if_RetrievedContactDetailsList.get(mCurrentPosition).getName());
 
         propic = (NetworkImageView) view.findViewById(R.id.header);
+        availability = (TextView) view.findViewById(R.id.status_text);
+        currentlyInto = (TextView) view.findViewById(R.id.currently_into_text);
+        moodPng = (ImageView) view.findViewById(R.id.mood_view);
+
         imageLoader = LoadImage.getInstance(getActivity().getApplicationContext())
                 .getImageLoader();
         imageLoader.get(if_RetrievedContactDetailsList.get(mCurrentPosition).getPropicLocation(), ImageLoader.getImageListener(propic,
                 R.drawable.ic_launcher, android.R.drawable
                         .ic_dialog_alert));
         propic.setImageUrl(if_RetrievedContactDetailsList.get(mCurrentPosition).getPropicLocation(), imageLoader);
+
+        switch(if_RetrievedContactDetailsList.get(mCurrentPosition).getMood()){
+
+            case "happy": moodPng.setImageResource(R.drawable.happy);
+                break;
+            case "sad": moodPng.setImageResource(R.drawable.sad);
+                break;
+            case "neutral": moodPng.setImageResource(R.drawable.neutral);
+                break;
+            default: moodPng.setImageResource(R.drawable.neutral);
+                break;
+        }
+        // Set the padding to match the Status Bar height
+        toolbar.setPadding(0, getStatusBarHeight(), 0, 0);
+
+        availability.setText(if_RetrievedContactDetailsList.get(mCurrentPosition).getStatus());
+        currentlyInto.setText(if_RetrievedContactDetailsList.get(mCurrentPosition).getTopic());
+
+
 
         //ImageView header = (ImageView) view.findViewById(R.id.header);
 
@@ -177,6 +205,17 @@ public class InfoFragment extends Fragment {
         mCurrentPosition = position; // Update position
 
     }
+
+    // A method to find height of the status bar
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

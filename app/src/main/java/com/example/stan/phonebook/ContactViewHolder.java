@@ -65,7 +65,12 @@ public class ContactViewHolder extends RecyclerView.ViewHolder implements View.O
 //        this.bakeryLogo.setImageBitmap(bakery.logo);
         this.name.setText(cd.getName());
         if (cd.getPropicLocation() == ""){
-            this.propic.setImageResource(R.drawable.ic_launcher);
+            imageLoader = LoadImage.getInstance(context.getApplicationContext())
+                    .getImageLoader();
+            imageLoader.get("", ImageLoader.getImageListener(propic,
+                    R.drawable.ic_launcher, android.R.drawable
+                            .ic_dialog_alert));
+            this.propic.setImageUrl("", imageLoader);
         }else {
             //this.propic.setImageResource(R.drawable.ic_launcher);
             imageLoader = LoadImage.getInstance(context.getApplicationContext())
