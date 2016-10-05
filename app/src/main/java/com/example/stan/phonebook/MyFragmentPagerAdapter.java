@@ -12,7 +12,7 @@ import android.support.v4.app.FragmentTransaction;
  * Created by Stan on 9/15/2016.
  */
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 3;
+    final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[] { "Tab1", "Tab2", "Tab3" };
     private Context context;
     private FragmentManager sfm;
@@ -39,6 +39,12 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
                 return null;
         }
 
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        // POSITION_NONE makes it possible to reload the PagerAdapter
+        return POSITION_NONE;
     }
 
     @Override

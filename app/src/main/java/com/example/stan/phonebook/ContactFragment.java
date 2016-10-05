@@ -71,10 +71,10 @@ public class ContactFragment extends Fragment {
     private static final int SPAN_COUNT = 2;
     private static final int DATASET_COUNT = 60;
 
-    private CustomAdapter adapter;
+    static CustomAdapter adapter;
 
     protected RecyclerView.LayoutManager mLayoutManager;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    static SwipeRefreshLayout mSwipeRefreshLayout;
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -140,7 +140,7 @@ public class ContactFragment extends Fragment {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
-        int verticalSpacing = 20;
+        int verticalSpacing = 10;
         VerticalSpaceItemDecorator itemDecorator =
                 new VerticalSpaceItemDecorator(verticalSpacing);
         ShadowVerticalSpaceItemDecorator shadowItemDecorator =
@@ -157,7 +157,7 @@ public class ContactFragment extends Fragment {
             public void onRefresh() {
                 // Refresh items
                 retrievedContactDetailsList.clear();
-                refreshList();
+                NetworkHelper.refreshList(userID, getActivity());
 
                 //adapter.notifyDataSetChanged();
             }
@@ -180,56 +180,56 @@ public class ContactFragment extends Fragment {
         }
     }
 
-    public void refreshList(){
-        //Getting values from edit texts
-        //loading = ProgressDialog.show(this,"Logging in...","Fetching...",false,false);
-
-        //Creating a string request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.RETRIEVE_MOODS_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        List<UserInfo> list;
-                        ObjectMapper mapper = new ObjectMapper();
-                        try {
-                            list = mapper.readValue(response, new TypeReference<List<UserInfo>>() { // use the mapper to read values
-                            });
-                            MainActivity.myInfo = list.remove(list.size()-1);
-                            Collections.sort(list);
-                            //retrievedContactDetailsList = list; // return when finished
-                            adapter.clear();
-                            mSwipeRefreshLayout.setRefreshing(false);
-                            adapter.addAll(list);
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //You can handle error here if you want
-                    }
-                }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String,String> params = new HashMap<>();
-                //Adding parameters to request
-                params.put(Config.KEY_UID, userID);
-
-                //returning parameter
-                return params;
-            }
-        };
-
-        //Adding the string request to the queue
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        requestQueue.add(stringRequest);
-
-    }
+//    public static void refreshList(){
+//        //Getting values from edit texts
+//        //loading = ProgressDialog.show(this,"Logging in...","Fetching...",false,false);
+//
+//        //Creating a string request
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.RETRIEVE_MOODS_URL,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        List<UserInfo> list;
+//                        ObjectMapper mapper = new ObjectMapper();
+//                        try {
+//                            list = mapper.readValue(response, new TypeReference<List<UserInfo>>() { // use the mapper to read values
+//                            });
+//                            MainActivity.myInfo = list.remove(list.size()-1);
+//                            Collections.sort(list);
+//                            //retrievedContactDetailsList = list; // return when finished
+//                            adapter.clear();
+//                            mSwipeRefreshLayout.setRefreshing(false);
+//                            adapter.addAll(list);
+//                        } catch (IOException e1) {
+//                            e1.printStackTrace();
+//                        }
+//
+//
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        //You can handle error here if you want
+//                    }
+//                }){
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//
+//                Map<String,String> params = new HashMap<>();
+//                //Adding parameters to request
+//                params.put(Config.KEY_UID, userID);
+//
+//                //returning parameter
+//                return params;
+//            }
+//        };
+//
+//        //Adding the string request to the queue
+//        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+//        requestQueue.add(stringRequest);
+//
+//    }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);

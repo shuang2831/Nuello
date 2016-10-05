@@ -42,9 +42,9 @@ public class CustomAdapter extends RecyclerView.Adapter<ContactViewHolder> {
 
        private class ViewHolder {
         TextView NameTextView; // Name TextView
-        TextView MobileTextView; // Mobile TextView
+        View statusIndicator; // Mobile TextView
         ImageView image;        // Thumbnail ImageView
-        ImageView favStar;      // Favorite Star
+        ImageView miniMood;      // Favorite Star
     }
 
     public CustomAdapter(Context context, int resource, List<UserInfo> contact_list){//, List<MoreContactDetails> more_contact_list) {
@@ -100,10 +100,10 @@ public class CustomAdapter extends RecyclerView.Adapter<ContactViewHolder> {
                                     // Check out the Slow Loading Images in the documentation.txt
             //convertView = inflater.inflate(resource , null);
             holder.NameTextView = (TextView) convertView.findViewById(R.id.firstLine); // add name line TextView to holder (firstLine)
-            holder.MobileTextView = (TextView) convertView.findViewById(R.id.secondLine); // add mobile line TextView to holder (secondLine)
+            holder.statusIndicator = (View) convertView.findViewById(R.id.status_ind); // add mobile line TextView to holder (secondLine)
             holder.image = (ImageView) convertView.findViewById(R.id.profilePic); // add Image ImageView to holder (profilePic)
             convertView.setTag(holder);
-            holder.favStar = (ImageView) convertView.findViewById(R.id.favoriteStar);
+            holder.miniMood = (ImageView) convertView.findViewById(R.id.mood_small);
         } else {
 
             holder = (ViewHolder) convertView.getTag();

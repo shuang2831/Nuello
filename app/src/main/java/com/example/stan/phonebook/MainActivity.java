@@ -71,46 +71,33 @@ import java.util.concurrent.ExecutionException;
 public class MainActivity extends AppCompatActivity
         implements ContactFragment.OnContactSelectedListener {
 
-    // ew, static variables, but they get the job done for now. Given more time I'd find a way to replace them
-    static List<UserInfo> FriendDetailList; // List of contacts and their base info
-    //static List<MoreContactDetails> MoreContactDetailsList = new ArrayList<MoreContactDetails>(); // List of contacts' extra info
-    static UserInfo myInfo;
+    // ew, static variables, but they get the job done for now.
+    // Given more time I'd find a way to replace them. We will use them to store data to be
+    // accessed across the fragments MainActivity contains.
+
+    static List<UserInfo> FriendDetailList; // List of friends and their base info
+    static UserInfo myInfo; // User's own info
+    static ViewPager vpPager; // Viewpager handling fragment logic
+
+
     FragmentPagerAdapter adapterViewPager;
-    private String userID;
-    ViewPager vpPager;
-    private SearchView mSearchView;
-    private String mSearchString;
-
-
-    private int PICK_IMAGE_REQUEST = 1;
-
+    private String userID; // user's uid
+    static Toolbar mainToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        // First get sharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences(Config.SHARED_PREF_NAME,Context.MODE_PRIVATE);
-        userID = sharedPreferences.getString(Config.UID_SHARED_PREF, "0");
-        myInfo = new UserInfo();
-        //getMyData();
-        refresh(true);
-
-        //            //ContactDetailsList = new RetrieveContacts().execute().get(); // Pull out a list of Contacts (and their data; check out ContactDetails.class)
-//
-//            for(int numContacts = 0; numContacts < ContactDetailsList.size(); numContacts++){
-//
-//                //MoreContactDetailsList.add(numContacts, new RetrieveContactsMoreDetails().execute(ContactDetailsList.get(numContacts).getDetailsURL()).get());
-//                // in a for loop (I'm wondering if this is suitable...), pull out the extra details from each contact using the DetailsURL of each one,
-//                // and put it into a list "MoreContactDetailsList"
-        //refresh();
-//
+        userID = sharedPreferences.getString(Config.UID_SHARED_PREF, "0"); // set uid
+        myInfo = new UserInfo(); // initialize myInfo
+        refresh(true); // Get user and friend data from database
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); // activity_main is out main layout
 
+        // Set ViewPager for fragments
         vpPager = (ViewPager) findViewById(R.id.vpPager);
         adapterViewPager = new MyFragmentPagerAdapter(getSupportFragmentManager(), this);
-        //vpPager.setAdapter(adapterViewPager);
-        // Give the TabLayout the ViewPager
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             // This method will be invoked when a new page becomes selected.
@@ -118,18 +105,12 @@ public class MainActivity extends AppCompatActivity
             public void onPageSelected(int position) {
                 Toast.makeText(MainActivity.this,
                         "Selected page position: " + position, Toast.LENGTH_SHORT).show();
-                if(position == 1){
-                    //getSupportActionBar().hide();
-                }
-
             }
-
             // This method will be invoked when the current page is scrolled
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 // Code goes here
             }
-
             // Called when the scroll state changes:
             // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
             @Override
@@ -137,83 +118,41 @@ public class MainActivity extends AppCompatActivity
                 // Code goes here
             }
         });
-//        if (findViewById(R.id.fragment_container) != null) {
-//
-//            // Create an instance of ContactFragment
-//            ContactFragment firstFragment = new ContactFragment();
-//
-//            // Pass extras as arguments
-//            firstFragment.setArguments(getIntent().getExtras());
-//
-//            // Add the fragment to the 'fragment_container' FrameLayout
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.fragment_container, firstFragment).commit();
-//        }
-
-
-        Toolbar mainToolbar = (Toolbar) findViewById(R.id.toolbar_main); // Setting up the toolbar
+        // Set toolbar for activity_main
+        mainToolbar = (Toolbar) findViewById(R.id.toolbar_main); // Setting up the toolbar
         setSupportActionBar(mainToolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
 
+    /**
+     * So far nothing is really being done here as the fragments are supposed to override
+     * the menus. Is it worth it to even define a menu/toolbar in activity_main instead of
+     * just the fragments themselves? Question for another day.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
        // getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
-//
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-//        //final Toast toast = new Toast(mApp);
-//
-//        if (mSearchView != null )
-//        {
-//            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-//            mSearchView.setIconifiedByDefault(false);
-//
-//            SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener()
-//            {
-//                public boolean onQueryTextChange(String newText)
-//                {
-//                    mSearchString = newText;
-//                    //doFilterAsync(mSearchString);
-//                    //toast.makeText(getApplicationContext(), "Test1", Toast.LENGTH_LONG).show();
-//                    return true;
-//                }
-//
-//                public boolean onQueryTextSubmit(String query)
-//                {
-//                    mSearchString = query;
-//                    //doFilterAsync(mSearchString);
-//                    //toast.makeText(getApplicationContext(), "Test2", Toast.LENGTH_LONG).show();
-//
-//                    return true;
-//                }
-//            };
-//
-//            mSearchView.setOnQueryTextListener(queryTextListener);
-//        }
 
         return true;
     }
 
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         if (id == R.id.menuLogout) {
             //calling logout method when the logout button is clicked
             logout();
@@ -231,11 +170,12 @@ public class MainActivity extends AppCompatActivity
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-
+    /**
+     * Don't think we need this function
+     */
     public void openContactInfo(int position) {
         // The user selected a contact form the list!
         //vpPager.setCurrentItem(4);
@@ -322,6 +262,7 @@ public class MainActivity extends AppCompatActivity
 //                                        .add(R.id.fragment_container, firstFragment).commit();
 //                            }
                             vpPager.setAdapter(adapterViewPager);
+                            mainToolbar.setBackgroundColor(updateHelpers.statusColor(myInfo.getStatus()));
 //                            TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 //                            tabLayout.setupWithViewPager(vpPager);
                         }
@@ -441,6 +382,7 @@ public class MainActivity extends AppCompatActivity
         alertDialog.show();
 
     }
+
 
     public void onInfoFragmentInteraction(String string) {
         // Do stuff

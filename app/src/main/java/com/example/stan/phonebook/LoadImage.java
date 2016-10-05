@@ -34,30 +34,7 @@ import java.io.InputStream;
  * working. I'd love to learn about how to do it efficiently, and well, have it work too.
  *
  */
-//public class LoadImage extends AsyncTask<String, Void, Bitmap> {
-//    ImageView bmImage;
-//
-//    public LoadImage(ImageView bmImage) {
-//        this.bmImage = bmImage;
-//    }
-//
-//    protected Bitmap doInBackground(String... urls) {
-//        String url = urls[0]; // Grab the url
-//        Bitmap mIcon = null;
-//        try {
-//            InputStream in = new java.net.URL(url).openStream();
-//            mIcon = BitmapFactory.decodeStream(in); // decode the url and get a Bitmap
-//        } catch (Exception e) {
-//            Log.e("Error", e.getMessage());
-//        }
-//        return mIcon; // Return the bitmap
-//    }
-//
-//    protected void onPostExecute(Bitmap result) {
-//        bmImage.setImageBitmap(result);
-//    }
-//
-//}
+
 
 public class LoadImage {
 

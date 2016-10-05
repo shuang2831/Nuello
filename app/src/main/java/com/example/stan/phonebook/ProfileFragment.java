@@ -3,6 +3,7 @@ package com.example.stan.phonebook;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -12,10 +13,12 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -82,6 +85,15 @@ public class ProfileFragment extends Fragment {
     private String userID;
     private String name;
 
+    private AppCompatButton changeMood;
+    private AppCompatButton changeStatus;
+    private AppCompatButton changeCI;
+
+    static final int MY_REQUEST_CODE = 101;
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     final static String ARG_POSITION = "position";
     int mCurrentPosition = -1;
     List<UserInfo> if_RetrievedContactDetailsList; // Initialize a list of class ContactDetails
@@ -122,17 +134,15 @@ public class ProfileFragment extends Fragment {
 
 
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(Config.SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         userID = sharedPreferences.getString(Config.UID_SHARED_PREF, "0");
         name = sharedPreferences.getString(Config.NAME_SHARED_PREF, "???");
 
         if_RetrievedContactDetailsList = MainActivity.FriendDetailList; // Again like in ContactFragment, is this a good idea?
         myProfileInfo = MainActivity.myInfo;
-        //if_MoreContactDetailsList = MainActivity.MoreContactDetailsList; // Pull out this date from MainActivity. I hope this isn't making things hella slow
 
-//        if (savedInstanceState != null) {
-//            mCurrentPosition = savedInstanceState.getInt(ARG_POSITION); // Save the position
-//        }
+
         mCurrentPosition = getArguments().getInt("position");
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
@@ -157,8 +167,86 @@ public class ProfileFragment extends Fragment {
         availability = (TextView) view.findViewById(R.id.status_profile);
         currentlyInto = (TextView) view.findViewById(R.id.currently_into_profile);
         moodPng = (ImageView) view.findViewById(R.id.mood_profile);
+        editor.putString(Config.MOOD_SHARED_PREF, myProfileInfo.getMood());
+        editor.commit();
+        updateMoodPng();
+        availability.setText(myProfileInfo.getStatus());
+        currentlyInto.setText(myProfileInfo.getTopic());
 
-        switch(myProfileInfo.getMood()){
+        changeMood = (AppCompatButton) view.findViewById(R.id.change_mood);
+
+//
+//        setListAdapter(adapter); // set it as our list adapter
+        //Adding click listener
+        changeMood.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v) {
+
+                DialogFragment newFragment = DialogList.newInstance(1);// {        // This is a bug, should be fixed
+//                    @Override                                           // by Google so that I can
+//                    public void onDismiss(DialogInterface dialog) {     // call onDismiss
+//
+//                        updateMoodPng();
+//                    }
+//                };
+                newFragment.show(getActivity().getSupportFragmentManager(), "a");
+
+            }
+        });
+
+        changeStatus = (AppCompatButton) view.findViewById(R.id.change_status);
+
+//
+//        setListAdapter(adapter); // set it as our list adapter
+        //Adding click listener
+        changeStatus.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v) {
+
+                DialogFragment newFragment = DialogList.newInstance(2);// {        // This is a bug, should be fixed
+//                    @Override                                           // by Google so that I can
+//                    public void onDismiss(DialogInterface dialog) {     // call onDismiss
+//
+//                        updateMoodPng();
+//                    }
+//                };
+                newFragment.show(getActivity().getSupportFragmentManager(), "a");
+
+            }
+        });
+
+        changeCI = (AppCompatButton) view.findViewById(R.id.change_ci);
+
+        changeCI.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v) {
+
+                DialogFragment newFragment = DialogList.newInstance(3);// {        // This is a bug, should be fixed
+//                    @Override                                           // by Google so that I can
+//                    public void onDismiss(DialogInterface dialog) {     // call onDismiss
+//
+//                        updateMoodPng();
+//                    }
+//                };
+                newFragment.show(getActivity().getSupportFragmentManager(), "a");
+
+            }
+        });
+
+//
+//        setListAdapter(adapter); // set it as our list adapter
+        //Adding click listener
+
+
+
+        return view; // return view
+    }
+
+
+
+    private void updateMoodPng(){
+
+        switch(sharedPreferences.getString(Config.MOOD_SHARED_PREF, "???")){
 
             case "happy": moodPng.setImageResource(R.drawable.happy);
                 break;
@@ -169,16 +257,7 @@ public class ProfileFragment extends Fragment {
             default: moodPng.setImageResource(R.drawable.neutral);
                 break;
         }
-        availability.setText(myProfileInfo.getStatus());
-        currentlyInto.setText(myProfileInfo.getTopic());
 
-
-        //ImageView header = (ImageView) view.findViewById(R.id.header);
-
-
-        // Inflate the layout for this fragment
-
-        return view; // return view
     }
 
     private void showFileChooser() {
@@ -326,6 +405,138 @@ public class ProfileFragment extends Fragment {
                 return params;
             }
         };
+
+        //Creating a Request Queue
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+
+        //Adding request to the queue
+        requestQueue.add(stringRequest);
+    }
+
+    public void updateField(String type, final String updateString) {
+        //Getting values from edit texts
+        //loading = ProgressDialog.show(this,"Logging in...","Fetching...",false,false);
+        //Creating a string request
+        StringRequest stringRequest;
+        switch(type) {
+
+            case "mood":
+                stringRequest = new StringRequest(Request.Method.POST, Config.UPDATE_MOOD,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                                Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
+
+
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                //You can handle error here if you want
+                            }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+
+                        Map<String, String> params = new HashMap<>();
+                        //Adding parameters to request
+                        params.put(Config.KEY_UID, userID);
+                        params.put(Config.KEY_MOOD, updateString);
+
+                        //returning parameter
+                        return params;
+                    }
+                };
+                break;
+            case "status":
+                stringRequest = new StringRequest(Request.Method.POST, Config.UPDATE_STATUS,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                //You can handle error here if you want
+                            }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+
+                        Map<String, String> params = new HashMap<>();
+                        //Adding parameters to request
+                        params.put(Config.KEY_UID, userID);
+                        params.put(Config.KEY_STATUS, updateString);
+
+                        //returning parameter
+                        return params;
+                    }
+                };
+                break;
+            case "ci":
+                stringRequest = new StringRequest(Request.Method.POST, Config.UPDATE_CI,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
+
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                //You can handle error here if you want
+                            }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+
+                        Map<String, String> params = new HashMap<>();
+                        //Adding parameters to request
+                        params.put(Config.KEY_UID, userID);
+                        params.put(Config.KEY_CI, updateString);
+
+                        //returning parameter
+                        return params;
+                    }
+                };
+                break;
+            default:
+                stringRequest = new StringRequest(Request.Method.POST, Config.UPDATE_MOOD,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                //You can handle error here if you want
+                            }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+
+                        Map<String, String> params = new HashMap<>();
+                        //Adding parameters to request
+                        params.put(Config.KEY_UID, userID);
+                        params.put(Config.KEY_MOOD, updateString);
+
+                        //returning parameter
+                        return params;
+                    }
+                };
+                break;
+        }
 
         //Creating a Request Queue
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());

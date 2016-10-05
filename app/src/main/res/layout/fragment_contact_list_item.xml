@@ -23,34 +23,36 @@
         android:focusable="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
         android:layout_toRightOf="@id/profilePic"
         android:gravity="center_vertical"
-        android:textSize="16sp" />
+        android:textSize="32sp"
+        android:layout_alignParentEnd="true" />
 
     <ImageView
-        android:id="@+id/favoriteStar"
+        android:id="@+id/mood_small"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_centerVertical="true"
         android:layout_alignRight="@id/firstLine"
         />
 
-    <TextView
-        android:id="@+id/secondLine"
+    <View
+        android:background="@drawable/status_indicator"
+        android:id="@+id/status_ind"
         android:focusable="false"
         android:layout_width="match_parent"
-        android:layout_height="26dip"
+        android:layout_height="12dip"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/profilePic"
 
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:layout_below="@id/firstLine"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:layout_toStartOf="@+id/mood_small"
+        android:layout_below="@+id/mood_small" />
+
 
 
 

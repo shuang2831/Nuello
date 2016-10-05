@@ -1,6 +1,8 @@
 package com.example.stan.phonebook;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -32,7 +34,9 @@ public class ContactViewHolder extends RecyclerView.ViewHolder implements View.O
 
     private NetworkImageView propic;
     private ImageLoader imageLoader;
-
+    private ImageView miniMood;
+    private View statusIndicator;
+    private  GradientDrawable bgShape;
     public ContactViewHolder(Context context, View itemView) {
 
         super(itemView);
@@ -43,6 +47,9 @@ public class ContactViewHolder extends RecyclerView.ViewHolder implements View.O
         // 2. Set up the UI widgets of the holder
         this.name = (TextView) itemView.findViewById(R.id.firstLine);
         this.propic = (NetworkImageView) itemView.findViewById(R.id.profilePic);
+        this.miniMood = (ImageView) itemView.findViewById(R.id.mood_small);
+        this.statusIndicator = (View) itemView.findViewById(R.id.status_ind);
+        this.bgShape = (GradientDrawable)this.statusIndicator.getBackground();
 //        this.bakeryName = (TextView) itemView.findViewById(R.id.bakery_name);
 //        this.address = (TextView) itemView.findViewById(R.id.bakery_address);
 //        this.description = (TextView) itemView.findViewById(R.id.bakery_description);
@@ -64,6 +71,8 @@ public class ContactViewHolder extends RecyclerView.ViewHolder implements View.O
 //        this.description.setText(bakery.description);
 //        this.bakeryLogo.setImageBitmap(bakery.logo);
         this.name.setText(cd.getName());
+        updateHelpers.imgViewUpdater(cd.getMood(), this.miniMood);
+        this.bgShape.setColor(updateHelpers.statusColor(cd.getStatus()));
         if (cd.getPropicLocation() == ""){
             imageLoader = LoadImage.getInstance(context.getApplicationContext())
                     .getImageLoader();
