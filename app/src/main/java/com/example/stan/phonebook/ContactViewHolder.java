@@ -18,14 +18,13 @@ import com.android.volley.toolbox.NetworkImageView;
 
 /**
  * Created by Stan on 9/15/2016.
+ *
+ * This ContactViewHolder extends the viewholder class and is used to set the list item views
+ * given by the CustomAdapter.
+ *
  */
 public class ContactViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-//    private final TextView bakeryName;
-//    private final TextView address;
-//    private final TextView description;
-//    private final TextView phone;
-//    private final TextView website;
 
     private final TextView name;
 
@@ -50,11 +49,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder implements View.O
         this.miniMood = (ImageView) itemView.findViewById(R.id.mood_small);
         this.statusIndicator = (View) itemView.findViewById(R.id.status_ind);
         this.bgShape = (GradientDrawable)this.statusIndicator.getBackground();
-//        this.bakeryName = (TextView) itemView.findViewById(R.id.bakery_name);
-//        this.address = (TextView) itemView.findViewById(R.id.bakery_address);
-//        this.description = (TextView) itemView.findViewById(R.id.bakery_description);
-//        this.phone = (TextView) itemView.findViewById(R.id.bakery_phone);
-//        this.website = (TextView) itemView.findViewById(R.id.bakery_website);
+
 
         // 3. Set the "onClick" listener of the holder
         itemView.setOnClickListener(this);
@@ -64,12 +59,7 @@ public class ContactViewHolder extends RecyclerView.ViewHolder implements View.O
 
         // 4. Bind the data to the ViewHolder
         this.cd = cd;
-//        this.bakeryName.setText(bakery.bakeryName);
-//        this.address.setText(bakery.address);
-//        this.phone.setText(bakery.phoneNumber);
-//        this.website.setText(bakery.websiteUrl);
-//        this.description.setText(bakery.description);
-//        this.bakeryLogo.setImageBitmap(bakery.logo);
+
         this.name.setText(cd.getName());
         updateHelpers.imgViewUpdater(cd.getMood(), this.miniMood);
         this.bgShape.setColor(updateHelpers.statusColor(cd.getStatus()));

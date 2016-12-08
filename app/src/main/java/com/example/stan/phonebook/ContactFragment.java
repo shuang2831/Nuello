@@ -51,8 +51,11 @@ import java.util.Map;
  *
  * This fragment uses the view fragment_contact_list.xml for its list and the view
  * fragment_contact_list_item.xml for its contact list item.
-*
-*
+ *
+ * ContactFragment is the main list fragment that is inflated when the app is opened.
+ * It displays a list (retrievedUserInfoList) in a recyclerview that contains the user's
+ * friends moods, availability, and names. This list is held in a CustomAdapter (adapter)
+ * which handles what is displayed in the view.
 *
 *
 */
@@ -85,7 +88,7 @@ public class ContactFragment extends Fragment {
 
     OnContactSelectedListener mCallback;
 
-    List<UserInfo> retrievedContactDetailsList; // Initialize a list of class ContactDetails
+    List<UserInfo> retrievedUserInfoList; // Initialize a list of class ContactDetails
                                                     // Because the JSON used contains an array of
                                                     // contacts, we need to pull out a full list,
                                                     // not just a single contact.
@@ -125,17 +128,16 @@ public class ContactFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_contact_list, container, false); // Set our fragment_contact_list.xml as our view (list view)
 
 
-        retrievedContactDetailsList = MainActivity.FriendDetailList; // pull in the ContactDetails list from MainActivity's call of RetrieveContactDetails
-        //MoreContactDetailsList = MainActivity.MoreContactDetailsList; // Pull out this date from MainActivity. I hope this isn't making things hella slow
-        // Question: Is this a smart thing to do? I'm not sure yet
+        retrievedUserInfoList = MainActivity.FriendDetailList; // pull in the ContactDetails list from MainActivity's call of RetrieveContactDetails
+
 
         adapter = new CustomAdapter(getActivity(), // Here we use our CustomAdapter to set up our list items.
-                                                                // As you can see, fragment_contact_list_item.xml is being used
-                                                                // as our list item, while retrievedContactDetailsList is the list
-                                                                // of objects we are pulling values from.
-                                                                // Check out CustomAdapter.Java for more info
+                                                    // As you can see, fragment_contact_list_item.xml is being used
+                                                    // as our list item, while retrievedContactDetailsList is the list
+                                                    // of objects we are pulling values from.
+                                                    // Check out CustomAdapter.Java for more info
 
-                R.layout.fragment_contact_list_item, retrievedContactDetailsList);//, MoreContactDetailsList);
+                R.layout.fragment_contact_list_item, retrievedUserInfoList);//, MoreContactDetailsList);
 
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -156,10 +158,9 @@ public class ContactFragment extends Fragment {
             @Override
             public void onRefresh() {
                 // Refresh items
-                retrievedContactDetailsList.clear();
+                retrievedUserInfoList.clear();
                 NetworkHelper.refreshList(userID, getActivity());
 
-                //adapter.notifyDataSetChanged();
             }
         });
         rView.setAdapter(adapter); // set it as our list adapter
@@ -263,13 +264,5 @@ public class ContactFragment extends Fragment {
         );
     }
 
-//    @Override
-//    // What happens when an item is clicked
-//    public void onListItemClick(ListView l, View v, int position, long id) {
-//
-//        mCallback.openContactInfo(position); // Run openContactInfo for the contact selected (passes its position)
-//
-//        //getListView().setSelector(android.R.color.holo_green_dark); // Colors! Just when selected.
-//    }
 
 }
